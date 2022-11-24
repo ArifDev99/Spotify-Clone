@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title>Document</title>
+    <script type="module" src="./dashboard.js"></script>
+</head>
+<body class="h-screen bg-black text-white ">
+    <main class="h-full grid-template-areas grid grid-cols-[250px_1fr] grid-row-[1fr_auto] ">
+        <aside class="sidenav">side nav</aside>
+        <article class="content bg-transparent relative overflow-auto scrollbar-hide">
+            <header class="header  bg-transparent">
+                <nav class="flex justify-between px-8 py-4">
+                    <button class="flex items-center gap-4">
+                        <section class="left">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 rounded-full bg-black-highlight">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                              </svg>                                  
+                        </section>
+                        <section class="right">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 rounded-full bg-black-highlight">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                              </svg>
+                        </section>
+                    </button>
+                    <button  id="Profile-btn" class="flex items-center gap-x-2 rounded-2xl p-1 px-2 bg-black-highlight hover:bg-black-light">
+                        <section id="Profile-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 rounded-full bg-gray">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </section>
+                        <section id="display-name" class="flex justify-center items-center gap-1">
+                            Arif Rahaman   
+                        </section>
+                        <i>▼</i>
+                    </button>
+                    <ul id='profile-menu' class=" absolute hidden top-16 right-0 w-[200px] rounded-md bg-black hover:bg-gray p-1">
+                        <li id="Account" class= "w-full cursor-pointer rounder-md p-1 hover:bg-gray">Account</li>
+                        <li id="settigns" class= "w-full cursor-pointer rounder-md p-1 hover:bg-gray">settings</li>
+                        <li id="logout" class= "w-full cursor-pointer rounder-md p-1 hover:bg-gray">Logout</li>
+                    </ul>
+                </nav>
+            </header>
+            <article class="w-full h-72 -z-[1] absolute top-0 px-5 py-8 bg-gradient-to-b from-black-light to bg-black-base">
+                <h1 id="Headings" class="text-6xl py-12 ">Hello Arif</h1>
+            </article>
+            <section id="page-content" class=" bg-black-base mt-48">
+                <section>
+                    <header>
+                        <nav>
+                            <ul class="grid grid-cols-[50px_2fr_1fr_1fr_50px]">
+                                <li>#</li>
+                                <li>TITLE</li>
+                                <li>ALBUM</li>
+                                <li>DATE ADDED</li>
+                                <li>🕓</li>
+                            </ul>
+                        </nav>
+                    </header>
+                   
+                    <section id="tracks">
+                        <section class="grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-black-light">
+                            <p>1</p>
+                            <section class="grid grid-cols-2 gap-2">
+                                <img  class="h-8 w-8" src="h-8 w-8" alt="" srcset="">
+                                <article class="flex flex-col gap-1">
+                                    <h2 class="text">songs</h2>
+                                    <h3 class="text-sm ">artists</h3>
+                                </article>
+                            </section>
+                            <p>album</p>
+                            <p>12 days ago</p>
+                            <p>1.36</p>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </article>
+        <footer class="now-playing">Now playing</footer>
+    </main>
+</body>
+</html>
