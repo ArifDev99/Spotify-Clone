@@ -70,6 +70,19 @@ const FormatTime=(duration)=>{
     return formatedTime
 }
 
+const onTrackSelection= (id,event)=>{
+    console.log(id);
+    console.log(trackItem)
+    
+    document.querySelectorAll("#tracks.track").forEach(trackItem=>{
+        if(trackItem.id===id){
+            trackItem.classList.add("selected");
+        }else{
+            trackItem.classList.remove("selected")
+        }
+    })
+}
+
 
 
 const loadtracksOfPlaylist=({tracks})=>{
@@ -78,8 +91,9 @@ const loadtracksOfPlaylist=({tracks})=>{
 
     let tracksNo=1
     for(let trackItem of tracks.items){
-        let {artists,name,album,duration_ms}=trackItem.track
+        let {artists,name,album,duration_ms:duration,preview_url:previewUrl,id}=trackItem.track
         let image=album.images.find(image=>image.height===64);
+        let artistNames=Array.from(artists,artist=>artist.name).join(", ")
         let track=document.createElement("section")
         track.className="tracks px-2 py-2 grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-black-gray cursor-pointer";
         track.innerHTML=`<p>${tracksNo++}</p>
@@ -87,16 +101,32 @@ const loadtracksOfPlaylist=({tracks})=>{
             <img  class="h-8 w-8" src="${image.url}" alt="${name}" srcset="">
             <article class="flex flex-col gap-1">
                 <h2 class="text">${name}</h2>
-                <h3 class="text-sm opacity-50">${Array.from(artists,artist=>artist.name).join(", ")}</h3>
+                <h3 class="text-sm opacity-50">${artistNames}</h3>
             </article>
         </section>
         <p class="text-sm px-1 opacity-50">${album.name}</p>
         <p class="opacity-50">12 days ago</p>
-        <p class="opacity-50">${FormatTime(duration_ms)}</p>`
-        
+        <p class="opacity-50">${FormatTime(duration)}</p>`
+
+        track.addEventListener("click",(event)=>playTrack(event,{image,artistNames,name,duration,previewUrl,id}))
+        const playButton = document.createElement("button");
+        playButton.id = `play-track-${id}`;
+        playButton.className = `play w-full absolute left-0 text-lg invisible material-symbols-outlined`;
+        playButton.textContent = "play_arrow";
+        // playButton.addEventListener("click", (event) => playTrack(event, { image, artistNames, name, duration, previewUrl, id }))
+        track.querySelector("p").appendChild(playButton);
         tracksSection.appendChild(track);
     }
 }
+
+const playTrack=(event,{image,artistNames,name,duration,previewUrl,id})=>{
+    console.log({image,artistNames,name,duration,previewUrl,id})
+    document.querySelector("#now-playing-image").src=image.url
+    document.querySelector("#now-playing-song").textContent=name
+    document.querySelector("#now-playing-artists").textContent=artistNames
+
+}
+
 
 const fillContentOfPlaylists= async(playlistid)=>{
     const playlistItems = await fetchRequest(`${ENDPOINT.playlist}/${playlistid}`);
