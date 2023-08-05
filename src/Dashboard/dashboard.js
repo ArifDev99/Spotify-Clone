@@ -3,6 +3,8 @@ import {logout,SECTIONTYPE} from '../common.js';
 // import { createAPIConfig } from '../api.js';
 // import { getAccessToken } from '../api.js';
 
+const audio = new Audio();
+
 import {ENDPOINT} from "../common.js"
 
 const onProfileClick = (event) => {
@@ -72,46 +74,57 @@ const FormatTime=(duration)=>{
 
 const onTrackSelection= (id,event)=>{
     console.log(id);
-    console.log(trackItem)
     
-    document.querySelectorAll("#tracks.track").forEach(trackItem=>{
+    document.querySelectorAll("#tracks .track").forEach(trackItem=>{
         if(trackItem.id===id){
-            trackItem.classList.add("selected");
+            trackItem.classList.add("bg-gray","selected");
         }else{
-            trackItem.classList.remove("selected")
+            trackItem.classList.remove("bg-gray","selected")
         }
     })
 }
 
-
+// const onTrackSelection = (id, event) => {
+//     document.querySelectorAll("#tracks .track").forEach(trackItem => {
+//         if (trackItem.id === id) {
+//             trackItem.classList.add("bg-gray", "selected");
+//         } else {
+//             trackItem.classList.remove("bg-gray", "selected");
+//         }
+//     })
+// }
 
 const loadtracksOfPlaylist=({tracks})=>{
     const tracksSection=document.querySelector("#tracks")
 
 
     let tracksNo=1
-    for(let trackItem of tracks.items){
+    for(let trackItem of tracks.items.filter(item=>item.track.preview_url)){
         let {artists,name,album,duration_ms:duration,preview_url:previewUrl,id}=trackItem.track
         let image=album.images.find(image=>image.height===64);
         let artistNames=Array.from(artists,artist=>artist.name).join(", ")
         let track=document.createElement("section")
-        track.className="tracks px-2 py-2 grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-black-gray cursor-pointer";
-        track.innerHTML=`<p>${tracksNo++}</p>
+        track.id=id;
+        track.className=" group track px-2 py-2 grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-black-gray cursor-pointer";
+        track.innerHTML=`<p class="relative w-full flex items-center justify-center justify-self-center"><span class="track-no group-hover:invisible group-focus:invisible ">${tracksNo++}</span></p>
         <section class="grid grid-cols-[auto_1fr] place-items-center gap-2 px-1">
             <img  class="h-8 w-8" src="${image.url}" alt="${name}" srcset="">
             <article class="flex flex-col gap-1">
-                <h2 class="text">${name}</h2>
-                <h3 class="text-sm opacity-50">${artistNames}</h3>
+                <h2 class="text line-clamp-1">${name}</h2>
+                <h3 class="text-sm opacity-50 line-clamp-1">${artistNames}</h3>
             </article>
         </section>
-        <p class="text-sm px-1 opacity-50">${album.name}</p>
-        <p class="opacity-50">12 days ago</p>
-        <p class="opacity-50">${FormatTime(duration)}</p>`
+        <p class="text-sm px-1 opacity-50 line-clamp-1">${album.name}</p>
+        <p class="text-sm opacity-50 line-clamp-1">12 days ago</p>
+        <p class="text-sm opacity-50 line-clamp-1">${FormatTime(duration)}</p>`
 
         track.addEventListener("click",(event)=>playTrack(event,{image,artistNames,name,duration,previewUrl,id}))
+        track.addEventListener("click",(event)=>onTrackSelection(id,event));
+
+
         const playButton = document.createElement("button");
         playButton.id = `play-track-${id}`;
-        playButton.className = `play w-full absolute left-0 text-lg invisible material-symbols-outlined`;
+        playButton.className = `play w-full absolute left-0 text-2xl invisible text-white group-hover:visible group-focus:visible material-symbols-outlined`;
         playButton.textContent = "play_arrow";
         // playButton.addEventListener("click", (event) => playTrack(event, { image, artistNames, name, duration, previewUrl, id }))
         track.querySelector("p").appendChild(playButton);
@@ -119,24 +132,65 @@ const loadtracksOfPlaylist=({tracks})=>{
     }
 }
 
+const onAudioMetadataLoaded = () => {
+    const totalSongDuration = document.querySelector("#total-song-duration");
+    totalSongDuration.textContent = `0:${audio.duration.toFixed(0)}`;
+}
+
+const updateIconsForPauseMode = () => {
+    const playButton = document.querySelector("#play");
+
+    playButton.querySelector("span").textContent = "play_circle";
+    
+}
+
+const updateIconsForPlayMode = () => {
+    const playButton = document.querySelector("#play");
+
+    playButton.querySelector("span").textContent = "pause_circle";
+}
 const playTrack=(event,{image,artistNames,name,duration,previewUrl,id})=>{
     console.log({image,artistNames,name,duration,previewUrl,id})
     document.querySelector("#now-playing-image").src=image.url
     document.querySelector("#now-playing-song").textContent=name
     document.querySelector("#now-playing-artists").textContent=artistNames
+    if (audio.src === previewUrl) {
+        toggleplaybtn();
+    } else {
+
+        // setNowPlayingInfo({ image, id, name, artistNames });
+        audio.src = previewUrl;
+        audio.play();
+    }
 
 }
 
 
 const fillContentOfPlaylists= async(playlistid)=>{
     const playlistItems = await fetchRequest(`${ENDPOINT.playlist}/${playlistid}`);
+    
+    
+    console.log(playlistItems);
+    const { name, description, images, tracks } = playlistItems;
+    const coverElement = document.querySelector("#cover-content");
+    coverElement.innerHTML = `
+    <div class="flex gap-2">
+        <img  class="object-contain h-48 w-48 rounded-md" src="${images[0].url}" alt="${name}" />
+        <section class="flex flex-col justify-center">
+        <h2 id="playlist-name" class="text-5xl font-bold">${name}</h2>
+        <p id="playlist-details" class="text-2xl">${description} songs</p>
+        <p id="playlist-details" class="text-base">${tracks.items.length} songs</p>
+        </section>
+        </div>
+        `
+        
+        // const pageHeadings = document.querySelector("#Headings");
+        // pageHeadings.textContent=playlistItems.name
     const pageContent = document.querySelector("#page-content");
-    const pageHeadings = document.querySelector("#Headings");
-    pageHeadings.textContent=playlistItems.name
     pageContent.innerHTML =` <header class="p-2">
     <nav>
         <ul class="grid grid-cols-[50px_2fr_1fr_1fr_50px]">
-            <li>#</li>
+            <li class="justify-self-center">#</li>
             <li>TITLE</li>
             <li>ALBUM</li>
             <li>DATE ADDED</li>
@@ -230,9 +284,27 @@ const loadSection = (section) => {
 
 }
 
+function toggleplaybtn(){
+    if (audio.src) {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    const volume = document.querySelector("#volume");
+    const playButton = document.querySelector("#play");
+    const nextTrack = document.querySelector("#next");
+    const prevTrack = document.querySelector("#prev");
+    const songDurationCompleted = document.querySelector("#song-duration-completed");
+    const songProgress = document.querySelector("#progress");
+    const timeline = document.querySelector("#timeline");
+    const audioControl = document.querySelector("#audio-control");
 
-
+    let progressInterval;
     loadUserProfile();
     const section = {
         type: SECTIONTYPE.DASHBOARD
@@ -249,6 +321,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
+    // play music
+    audio.addEventListener("loadedmetadata", onAudioMetadataLoaded);
+    audio.addEventListener("play",()=>{
+        progressInterval=setInterval(()=>{
+            if(audio.paused){
+                return
+            }
+            songDurationCompleted.textContent=`${audio.currentTime.toFixed(0)<10 ? "0:0"+audio.currentTime.toFixed(0) : "0:"+audio.currentTime.toFixed(0)}`;
+            songProgress.style.width=`${(audio.currentTime/audio.duration)*100}%`;
+        },100)
+        updateIconsForPlayMode();
+    })
+
+    audio.addEventListener("pause", () => {
+        if (progressInterval) {
+            clearInterval();
+        }
+        // const selectedTrackId = audioControl.getAttribute("data-track-id");
+        updateIconsForPauseMode();
+    })
+
+    
+    volume.addEventListener("change",()=>{
+        audio.volume=volume.value / 100;
+    })
+    
+    playButton.addEventListener("click", toggleplaybtn);
     // for scroll 
     document.querySelector(".content").addEventListener("scroll", (event) => {
         const header = document.querySelector(".header");

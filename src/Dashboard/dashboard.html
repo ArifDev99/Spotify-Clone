@@ -14,7 +14,7 @@
         <aside class="sidenav">side nav</aside>
         <article class="content bg-transparent relative overflow-auto scrollbar-hide">
             <header class="header  bg-transparent">
-                <nav class="flex justify-between px-8 py-4">
+                <nav class="flex justify-between px-8 py-2 items-center">
                     <button class="flex items-center gap-4">
                         <section class="left">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 rounded-full bg-black-highlight">
@@ -45,7 +45,7 @@
                     </ul>
                 </nav>
             </header>
-            <article class="w-full h-72 -z-[1] absolute top-0 px-5 py-8 bg-gradient-to-b from-black-light to bg-black-base">
+            <article id="cover-content" class="w-full h-72 -z-[1] absolute top-0 px-5 py-14 bg-gradient-to-b from-black-light to bg-black-base">
                 <h1 id="Headings" class="text-6xl py-12 ">Hello Arif</h1>
             </article>
             <section id="page-content" class=" bg-black-base mt-48">
@@ -85,8 +85,8 @@
                 <section class="grid grid-cols-[auto_1fr] place-content-center gap-4">
                     <img id="now-playing-image" class="h-12 w-12" src="" alt="title">
                     <section class="flex flex-col justify-center">
-                        <h2 id="now-playing-song" class="text-sm font-semibold">song title</h2>
-                        <p id="now-playing-artists" class="text-xs">song artists</p>
+                        <h2 id="now-playing-song" class="text-sm font-semibold line-clamp-1">song title</h2>
+                        <p id="now-playing-artists" class="text-xs line-clamp-1">song artists</p>
                     </section>
                 </section>
                 <!-- section for audio controll -->
@@ -95,9 +95,11 @@
                         <button id="prev"><span style="font-size: 48px;" class="material-symbols-outlined">
                             skip_previous
                             </span></button>
-                        <button id="play"><span style="font-size: 48px;" class="material-symbols-outlined">
+                        <button id="play"><span id="playIcon" style="font-size: 48px;" class="material-symbols-outlined">
                             play_circle
-                            </span></button>
+                            </span>
+                            <!-- <span id="pauseIcon" class="material-symbols-outlined hidden" style="font-size: 48px;">pause_circle</span> -->
+                        </button>
                         <button id="next"><span style="font-size: 48px;" class="material-symbols-outlined">
                             skip_next
                             </span></button>
@@ -105,7 +107,9 @@
                 
                     <section class="flex w-full items-center justify-center p-1 gap-4">
                         <span id="song-duration-completed">0:00</span>
-                        <section id="progress" class="h-2 w-full cursor-pointer rounded-3xl bg-white"></section>
+                        <section id="timeline" class="w-full cursor-pointer rounded-3xl bg-white">
+                            <section id="progress" class="h-2 w-0 bg-green rounded-3xl"></section>
+                        </section>
                         <span id="total-song-duration">0:00</span>
                     </section>
                 </section>
