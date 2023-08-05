@@ -18,7 +18,7 @@ export const logout=()=>{
 }
 
 export const SECTIONTYPE={
-    DASHBOARD:"DASHBOARB",
+    DASHBOARD:"DASHBOARD",
     PLAYLIST:"PLAYLIST",
 
 }
