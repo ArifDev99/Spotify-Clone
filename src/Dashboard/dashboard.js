@@ -76,28 +76,34 @@ const onTrackSelection= (id,event)=>{
     console.log(id);
     
     document.querySelectorAll("#tracks .track").forEach(trackItem=>{
-        if(trackItem.id===id){
-            trackItem.classList.add("bg-gray","selected");
-        }else{
-            trackItem.classList.remove("bg-gray","selected")
+        const playButton = trackItem.querySelector("button.play");
+        const trackNumber = trackItem.querySelector("span.track-no");
+        
+        if (trackItem.id === id) {
+            trackItem.classList.add("bg-black-gray","text-green", "selected");
+            if (playButton) {
+                playButton.classList.remove("invisible")
+            }
+            if (trackNumber) {
+                trackNumber.classList.add("invisible");
+            }
+        } else {
+            trackItem.classList.remove("bg-black-gray","text-green", "selected");
+            if (playButton) {
+                playButton.classList.add("invisible")
+            }
+            if (trackNumber) {
+                trackNumber.classList.remove("invisible");
+            }
         }
     })
 }
 
-// const onTrackSelection = (id, event) => {
-//     document.querySelectorAll("#tracks .track").forEach(trackItem => {
-//         if (trackItem.id === id) {
-//             trackItem.classList.add("bg-gray", "selected");
-//         } else {
-//             trackItem.classList.remove("bg-gray", "selected");
-//         }
-//     })
-// }
 
 const loadtracksOfPlaylist=({tracks})=>{
     const tracksSection=document.querySelector("#tracks")
 
-
+    let loadedTrack=[];
     let tracksNo=1
     for(let trackItem of tracks.items.filter(item=>item.track.preview_url)){
         let {artists,name,album,duration_ms:duration,preview_url:previewUrl,id}=trackItem.track
@@ -105,8 +111,8 @@ const loadtracksOfPlaylist=({tracks})=>{
         let artistNames=Array.from(artists,artist=>artist.name).join(", ")
         let track=document.createElement("section")
         track.id=id;
-        track.className=" group track px-2 py-2 grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-black-gray cursor-pointer";
-        track.innerHTML=`<p class="relative w-full flex items-center justify-center justify-self-center"><span class="track-no group-hover:invisible group-focus:invisible ">${tracksNo++}</span></p>
+        track.className=" group track px-2 py-2 grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-gray cursor-pointer";
+        track.innerHTML=`<p class="relative w-full flex items-center justify-center justify-self-center"><span class="track-no group-hover:invisible">${tracksNo++}</span></p>
         <section class="grid grid-cols-[auto_1fr] place-items-center gap-2 px-1">
             <img  class="h-8 w-8" src="${image.url}" alt="${name}" srcset="">
             <article class="flex flex-col gap-1">
@@ -124,12 +130,14 @@ const loadtracksOfPlaylist=({tracks})=>{
 
         const playButton = document.createElement("button");
         playButton.id = `play-track-${id}`;
-        playButton.className = `play w-full absolute left-0 text-2xl invisible text-white group-hover:visible group-focus:visible material-symbols-outlined`;
+        playButton.className = `play w-full absolute left-0 text-2xl invisible group-hover:visible  material-symbols-outlined`;
         playButton.textContent = "play_arrow";
         // playButton.addEventListener("click", (event) => playTrack(event, { image, artistNames, name, duration, previewUrl, id }))
         track.querySelector("p").appendChild(playButton);
         tracksSection.appendChild(track);
+        loadedTrack.push({id, artists, name, album, duration, previewUrl, artistNames, image})
     }
+    localStorage.setItem("LOADED_TRACKS",JSON.stringify(loadedTrack))
 }
 
 const onAudioMetadataLoaded = () => {
@@ -151,20 +159,64 @@ const updateIconsForPlayMode = () => {
 }
 const playTrack=(event,{image,artistNames,name,duration,previewUrl,id})=>{
     console.log({image,artistNames,name,duration,previewUrl,id})
-    document.querySelector("#now-playing-image").src=image.url
-    document.querySelector("#now-playing-song").textContent=name
-    document.querySelector("#now-playing-artists").textContent=artistNames
+    // document.querySelector("#now-playing-image").src=image.url
+    // document.querySelector("#now-playing-song").textContent=name
+    // document.querySelector("#now-playing-artists").textContent=artistNames
     if (audio.src === previewUrl) {
         toggleplaybtn();
     } else {
 
-        // setNowPlayingInfo({ image, id, name, artistNames });
+        setNowPlayingInfo({ image, id, name, artistNames });
         audio.src = previewUrl;
         audio.play();
     }
 
 }
 
+const setNowPlayingInfo = ({ image, id, name, artistNames }) => {
+    const audioControl = document.querySelector("#audio-control");
+    const songTitle = document.querySelector("#now-playing-song");
+    const nowPlayingSongImage = document.querySelector("#now-playing-image");
+    const artists = document.querySelector("#now-playing-artists");
+    const songInfo = document.querySelector("#song-info");
+
+    nowPlayingSongImage.src = image.url;
+    audioControl.setAttribute("data-track-id", id);
+    songTitle.textContent = name;
+    artists.textContent = artistNames;
+    onTrackSelection(id);
+    songInfo.classList.remove("invisible");
+}
+
+const findCurrentTrack = () => {
+    const audioControl = document.querySelector("#audio-control");
+    const trackId = audioControl.getAttribute("data-track-id");
+    if (trackId) {
+        const loadedTracks = JSON.parse(localStorage.getItem("LOADED_TRACKS"));
+        const currentTrackIndex = loadedTracks?.findIndex(track => track.id === trackId);
+        return { currentTrackIndex, tracks: loadedTracks };
+
+
+    }
+    return null;
+}
+
+const playPrevTrack=()=>{
+    const { currentTrackIndex = -1, tracks = null } = findCurrentTrack() ?? {};
+    if (currentTrackIndex > 0) {
+        const prevTrack = tracks[currentTrackIndex - 1];
+        playTrack(null, prevTrack);
+    }
+}
+
+const playNextTrack=()=>{
+    const { currentTrackIndex = -1, tracks = null } = findCurrentTrack() ?? {};
+    if (currentTrackIndex > -1 && currentTrackIndex < tracks?.length - 1) {
+        const currentTrack = tracks[currentTrackIndex + 1];
+        playTrack(null, currentTrack);
+    }
+
+}
 
 const fillContentOfPlaylists= async(playlistid)=>{
     const playlistItems = await fetchRequest(`${ENDPOINT.playlist}/${playlistid}`);
@@ -341,13 +393,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // const selectedTrackId = audioControl.getAttribute("data-track-id");
         updateIconsForPauseMode();
     })
-
+    prevTrack.addEventListener("click", playPrevTrack);
+    nextTrack.addEventListener("click", playNextTrack)
     
     volume.addEventListener("change",()=>{
         audio.volume=volume.value / 100;
     })
     
     playButton.addEventListener("click", toggleplaybtn);
+    
+
     // for scroll 
     document.querySelector(".content").addEventListener("scroll", (event) => {
         const header = document.querySelector(".header");

@@ -13,7 +13,9 @@ module.exports = {
         'black-light':'#181818',
         'black-gray':'#282828',
         'black-highlight':'rgba(0,0,0,.7)',
-        'gray':'#535353'
+        'gray':'#535353',
+        "primary": "#FFFFFF",
+        "secondary": "#b3b3b3",
       },
       gridTemplateColumns:{
         'auto-fill-cards' : 'repeat(auto-fill,minmax(200px,1fr))'

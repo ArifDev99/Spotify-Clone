@@ -11,7 +11,36 @@
 </head>
 <body class="h-screen bg-black text-white ">
     <main class="h-full grid-template-areas grid grid-cols-[250px_1fr] grid-row-[1fr_auto] ">
-        <aside class="sidenav">side nav</aside>
+        <aside class="sidenav bg-black-highlight">
+            <nav class="flex flex-col items-start gap-8 py-8 px-4">
+                <section>
+                  <a href="/">
+                    <img
+                      class="h-10 w-full object-contain"
+                      src="../spotify-icons-logos/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_White.png"
+                      alt="Spotify Logo"
+                      srcset=""
+                    />
+                  </a>
+                </section>
+                <section>
+                  <ul class="flex flex-col gap-4 text-sm text-secondary">
+                    <li class="flex cursor-pointer items-center gap-2 hover:text-primary">
+                      <span class="material-symbols-outlined"> home </span><span></span>Home
+                    </li>
+                    <li class="flex cursor-pointer items-center gap-2 hover:text-primary">
+                      <span class="material-symbols-outlined"> search </span><span></span>Search
+                    </li>
+                  </ul>
+                </section>
+                <section id="user-playlists" class="w-full border-t border-secondary pt-4">
+                  <ul class="flex flex-col gap-4 text-sm text-secondary">
+                    <!-- <li class="flex items-center gap-2">adf</li>
+                    <li class="flex items-center gap-2"></li> -->
+                  </ul>
+                </section>
+              </nav> 
+        </aside>
         <article class="content bg-transparent relative overflow-auto scrollbar-hide">
             <header class="header  bg-transparent">
                 <nav class="flex justify-between px-8 py-2 items-center">
@@ -80,9 +109,9 @@
                 </section>
             </section>
         </article>
-        <footer class="now-playing border-t border-t-black-light bg-black-gray px-4">
+        <footer class="now-playing border-t border-t-black-light bg-black-highlight px-4">
             <section class="grid grid-cols-[1fr_2fr_1fr] gap-4 p-1">
-                <section class="grid grid-cols-[auto_1fr] place-content-center gap-4">
+                <section id="song-info" class="grid grid-cols-[auto_1fr] place-content-center gap-4 invisible">
                     <img id="now-playing-image" class="h-12 w-12" src="" alt="title">
                     <section class="flex flex-col justify-center">
                         <h2 id="now-playing-song" class="text-sm font-semibold line-clamp-1">song title</h2>
@@ -90,27 +119,27 @@
                     </section>
                 </section>
                 <!-- section for audio controll -->
-                <section id="audio-control">
+                <section id="audio-control" class="p-4">
                     <section class="flex items-center justify-center ">
-                        <button id="prev"><span style="font-size: 48px;" class="material-symbols-outlined">
+                        <button id="prev"><span style="font-size: 48px;" class="material-symbols-outlined  hover:text-secondary">
                             skip_previous
                             </span></button>
-                        <button id="play"><span id="playIcon" style="font-size: 48px;" class="material-symbols-outlined">
+                        <button id="play"><span id="playIcon" style="font-size: 48px;" class="material-symbols-outlined hover:text-secondary">
                             play_circle
                             </span>
                             <!-- <span id="pauseIcon" class="material-symbols-outlined hidden" style="font-size: 48px;">pause_circle</span> -->
                         </button>
-                        <button id="next"><span style="font-size: 48px;" class="material-symbols-outlined">
+                        <button id="next"><span style="font-size: 48px;" class="material-symbols-outlined  hover:text-secondary">
                             skip_next
                             </span></button>
                     </section>
                 
-                    <section class="flex w-full items-center justify-center p-1 gap-4">
-                        <span id="song-duration-completed">0:00</span>
+                    <section class="flex w-full items-center justify-center p-1 gap-2">
+                        <span id="song-duration-completed" class="text-sm">0:00</span>
                         <section id="timeline" class="w-full cursor-pointer rounded-3xl bg-white">
                             <section id="progress" class="h-2 w-0 bg-green rounded-3xl"></section>
                         </section>
-                        <span id="total-song-duration">0:00</span>
+                        <span id="total-song-duration" class="text-sm">0:00</span>
                     </section>
                 </section>
                 <!-- section for volume  -->
