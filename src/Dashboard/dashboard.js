@@ -1,5 +1,7 @@
 import {fetchRequest} from '../api.js';
 import {logout,SECTIONTYPE} from '../common.js';
+import { gsap } from 'gsap';
+import { Expo } from 'gsap';
 // import { createAPIConfig } from '../api.js';
 // import { getAccessToken } from '../api.js';
 
@@ -36,8 +38,9 @@ const loadUserProfile = async () => {
     displayName.textContent = displayname
 }
 
-const onPlaylistItemsClick = (event) => {
-    const Id=event.target.id
+const onPlaylistItemsClick = (event,id) => {
+    // console.log(event.target);
+    const Id=id
     const section = {
         type: SECTIONTYPE.PLAYLIST,
         playlistid:Id
@@ -285,7 +288,7 @@ const loadFeaturedPlaylists = async (endpoint, Id) => {
         playlistItems.className = "p-4 bg-black-light rounded hover:bg-black-gray"
         playlistItems.id = item.id
         playlistItems.setAttribute("data-type", "playlist")
-        playlistItems.addEventListener("click",onPlaylistItemsClick)
+        playlistItems.addEventListener("click", (event)=>onPlaylistItemsClick(event,item.id));
         const imageUrl = item.images[0].url;
         playlistItems.innerHTML = `<img  class="rounded mb-2" src="${imageUrl}" alt="fratured" srcset="">
         <h2 class="text-base font-semibold mb-4 truncate">${item.name}</h2>
@@ -346,6 +349,16 @@ function toggleplaybtn(){
     }
 }
 
+function audioSectionAnim(){
+    var tl = gsap.timeline();
+    tl.to(".audio-items",{
+        y:'0',
+        duration:2,
+        delay:0,
+        ease:Expo.easeInOut
+    })
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const volume = document.querySelector("#volume");
     const playButton = document.querySelector("#play");
@@ -355,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const songProgress = document.querySelector("#progress");
     const timeline = document.querySelector("#timeline");
     const audioControl = document.querySelector("#audio-control");
-
+    audioSectionAnim();
     let progressInterval;
     loadUserProfile();
     const section = {
@@ -417,7 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     window.addEventListener("popstate", (event) => {
+        
         console.log(event)
+        loadSection(event.state);
     })
 
 

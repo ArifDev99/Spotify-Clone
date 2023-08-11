@@ -16,3 +16,8 @@
 .grid-template-areas .now-playing{
     grid-area: now-playing;
 }
+input[type="range"] {
+    accent-color: #1DB954;
+    cursor: pointer;
+    height: 0.25rem;
+}

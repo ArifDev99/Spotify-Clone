@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
+    
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
     <title>Document</title>
     <script type="module" src="./dashboard.js"></script>
@@ -111,46 +112,54 @@
         </article>
         <footer class="now-playing border-t border-t-black-light bg-black-highlight px-4">
             <section class="grid grid-cols-[1fr_2fr_1fr] gap-4 p-1">
-                <section id="song-info" class="grid grid-cols-[auto_1fr] place-content-center gap-4 invisible">
-                    <img id="now-playing-image" class="h-12 w-12" src="" alt="title">
-                    <section class="flex flex-col justify-center">
-                        <h2 id="now-playing-song" class="text-sm font-semibold line-clamp-1">song title</h2>
-                        <p id="now-playing-artists" class="text-xs line-clamp-1">song artists</p>
+                
+                <section id="song-info" class="flex items-center invisible overflow-hidden">
+                    <section class="audio-items grid grid-cols-[auto_1fr] gap-4   transform translate-y-[100%] items-center ">
+                        <img id="now-playing-image" class="h-12 w-12" src="" alt="title">
+                        <section class="flex flex-col justify-center">
+                            <h2 id="now-playing-song" class="text-sm font-semibold line-clamp-1">song title</h2>
+                            <p id="now-playing-artists" class="text-xs line-clamp-1">song artists</p>
+                        </section>
                     </section>
                 </section>
                 <!-- section for audio controll -->
-                <section id="audio-control" class="p-4">
-                    <section class="flex items-center justify-center ">
-                        <button id="prev"><span style="font-size: 48px;" class="material-symbols-outlined  hover:text-secondary">
-                            skip_previous
-                            </span></button>
-                        <button id="play"><span id="playIcon" style="font-size: 48px;" class="material-symbols-outlined hover:text-secondary">
-                            play_circle
-                            </span>
-                            <!-- <span id="pauseIcon" class="material-symbols-outlined hidden" style="font-size: 48px;">pause_circle</span> -->
-                        </button>
-                        <button id="next"><span style="font-size: 48px;" class="material-symbols-outlined  hover:text-secondary">
-                            skip_next
-                            </span></button>
-                    </section>
-                
-                    <section class="flex w-full items-center justify-center p-1 gap-2">
-                        <span id="song-duration-completed" class="text-sm">0:00</span>
-                        <section id="timeline" class="w-full cursor-pointer rounded-3xl bg-white">
-                            <section id="progress" class="h-2 w-0 bg-green rounded-3xl"></section>
+                <section id="audio-control" class=" p-0.5 overflow-hidden ">
+                    <section class="audio-items transform translate-y-[100%] ">
+                        <section class="flex items-center justify-center ">
+                            <button id="prev"><span style="font-size: 2.5rem;" class="material-symbols-outlined  hover:text-green">
+                                skip_previous
+                                </span></button>
+                            <button id="play"><span id="playIcon" style="font-size: 2.5rem;" class="material-symbols-outlined hover:text-green">
+                                play_circle
+                                </span>
+                                <!-- <span id="pauseIcon" class="material-symbols-outlined hidden" style="font-size: 48px;">pause_circle</span> -->
+                            </button>
+                            <button id="next"><span style="font-size: 2.5rem;" class="material-symbols-outlined  hover:text-green">
+                                skip_next
+                                </span></button>
                         </section>
-                        <span id="total-song-duration" class="text-sm">0:00</span>
+                    
+                        <section class="flex w-full items-center justify-center p-1 gap-2">
+                            <span id="song-duration-completed" class="text-sm">0:00</span>
+                            <section id="timeline" class="w-full cursor-pointer rounded-3xl bg-white">
+                                <section id="progress" class="h-1 w-0 bg-green rounded-3xl"></section>
+                            </section>
+                            <span id="total-song-duration" class="text-sm">0:00</span>
+                        </section>
                     </section>
                 </section>
                 <!-- section for volume  -->
-                <section id="volume-control" class="flex items-center justify-center">
-                    <span class="material-symbols-outlined">
-                        volume_up
+                <section id="volume-control" class=" flex items-center justify-center overflow-hidden">
+                    <section class="audio-items transform translate-y-[200%] flex items-center">
+                        <span class="material-symbols-outlined">
+                            volume_up
                         </span>
-                    <input type="range" id="volume" value="100" min="0" max="100">
+                        <input type="range" id="volume" value="100" min="0" max="100">
+                    </section>
                 </section>
             </section>
         </footer>
+    
     </main>
 </body>
 </html>
