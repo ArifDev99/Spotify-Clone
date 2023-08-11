@@ -1,8 +1,14 @@
 import { ACCESS_TOKEN } from "../common";
 import { TOKEN_TYPE } from "../common";
 import { EXPIRES_IN } from "../common";
-var client_id = 'bbd15d7650d04cf8ad828930833eb29a';
-var redirect_uri = 'http://localhost:3000/Login/login.html';
+
+const APP_URL= import.meta.env.VITE_APP_URL
+
+// var client_id = 'bbd15d7650d04cf8ad828930833eb29a';
+var client_id = import.meta.env.VITE_CLIENT_ID;
+
+// var redirect_uri = 'http://localhost:3000/Login/login.html';
+var redirect_uri = import.meta.env.VITE_REDIRECT_URI;
 var scope = 'user-read-private user-read-email playlist-read-private user-top-read user-library-read';
 // var state = generateRandomString(16);
 
@@ -29,7 +35,7 @@ window.addEventListener('load',()=>{
     console.log("inside login window")
     const Access_Token_key=localStorage.getItem(ACCESS_TOKEN)
     if(Access_Token_key){
-        window.location.href='http://localhost:3000/Dashboard/dashboard.html'
+        window.location.href=`${APP_URL}/Dashboard/dashboard.html`
     }
     if(window.opener && !window.opener.closed){
         window.focus();
@@ -48,7 +54,7 @@ window.addEventListener('load',()=>{
         if(AccessToken){
             window.close();
             window.setItemsInLocalStorage(AccessToken,tokenType,expiresIn)
-            window.opener.location.href='http://localhost:3000/'
+            window.opener.location.href=`${APP_URL}`
         }
     }
     
