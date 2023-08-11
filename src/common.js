@@ -14,7 +14,7 @@ export const logout=()=>{
     localStorage.removeItem(ACCESS_TOKEN)
     localStorage.removeItem(TOKEN_TYPE)
     localStorage.removeItem(EXPIRES_IN)
-    window.location.href='${APP_URL}'
+    window.location.href=`${APP_URL}`
 }
 
 export const SECTIONTYPE={
