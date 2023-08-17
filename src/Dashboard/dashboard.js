@@ -114,7 +114,7 @@ const loadtracksOfPlaylist=({tracks})=>{
         let artistNames=Array.from(artists,artist=>artist.name).join(", ")
         let track=document.createElement("section")
         track.id=id;
-        track.className=" group track px-2 py-2 grid grid-cols-[50px_2fr_1fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-gray cursor-pointer";
+        track.className=" group track px-2 py-2 grid grid-cols-[50px_2fr_1fr_50px] items-center justify-items-start rounded-md hover:bg-gray cursor-pointer";
         track.innerHTML=`<p class="relative w-full flex items-center justify-center justify-self-center"><span class="track-no group-hover:invisible">${tracksNo++}</span></p>
         <section class="grid grid-cols-[auto_1fr] place-items-center gap-2 px-1">
             <img  class="h-8 w-8" src="${image.url}" alt="${name}" srcset="">
@@ -123,9 +123,8 @@ const loadtracksOfPlaylist=({tracks})=>{
                 <h3 class="text-sm opacity-50 line-clamp-1">${artistNames}</h3>
             </article>
         </section>
-        <p class="text-sm px-1 opacity-50 line-clamp-1">${album.name}</p>
-        <p class="text-sm opacity-50 line-clamp-1">12 days ago</p>
-        <p class="text-sm opacity-50 line-clamp-1">${FormatTime(duration)}</p>`
+        <p class="text-sm px-1 opacity-50 line-clamp-1 hidden">${album.name}</p>
+        <p class="text-sm opacity-50 line-clamp-1 hidden">${FormatTime(duration)}</p>`
 
         track.addEventListener("click",(event)=>playTrack(event,{image,artistNames,name,duration,previewUrl,id}))
         track.addEventListener("click",(event)=>onTrackSelection(id,event));
@@ -230,11 +229,11 @@ const fillContentOfPlaylists= async(playlistid)=>{
     const coverElement = document.querySelector("#cover-content");
     coverElement.innerHTML = `
     <div class="flex gap-2">
-        <img  class="object-contain h-48 w-48 rounded-md" src="${images[0].url}" alt="${name}" />
+        <img  class="object-contain sm:h-48 sm:w-48 h-24 w-24 rounded-md" src="${images[0].url}" alt="${name}" />
         <section class="flex flex-col justify-center">
-        <h2 id="playlist-name" class="text-5xl font-bold">${name}</h2>
-        <p id="playlist-details" class="text-2xl">${description} songs</p>
-        <p id="playlist-details" class="text-base">${tracks.items.length} songs</p>
+        <h2 id="playlist-name" class="text-2xl sm:text-5xl font-bold ">${name}</h2>
+        <p id="playlist-details" class=" text-lg sm:text-2xl">${description} songs</p>
+        <p id="playlist-details" class="text-sm sm:text-base">${tracks.items.length} songs</p>
         </section>
         </div>
         `
@@ -244,12 +243,11 @@ const fillContentOfPlaylists= async(playlistid)=>{
     const pageContent = document.querySelector("#page-content");
     pageContent.innerHTML =` <header class="p-2">
     <nav>
-        <ul class="grid grid-cols-[50px_2fr_1fr_1fr_50px]">
+        <ul class="grid grid-cols-[50px_2fr_1fr_50px]">
             <li class="justify-self-center">#</li>
             <li>TITLE</li>
-            <li>ALBUM</li>
-            <li>DATE ADDED</li>
-            <li>🕓</li>
+            <li >ALBUM</li>
+            <li >🕓</li>
         </ul>
     </nav>
     </header>
