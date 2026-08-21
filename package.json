@@ -19,5 +19,8 @@
     "@tailwindcss/line-clamp": "^0.4.2",
     "gsap": "^3.12.2",
     "tailwind-scrollbar-hide": "^1.1.7"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }
