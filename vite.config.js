@@ -15,9 +15,9 @@ export default defineConfig(({ command, mode }) => {
       outDir: "../dist",
       rollupOptions: {
           input: {
-              main: resolve(__dirname, 'src/index.html'),
-              dashboard: resolve(__dirname, 'src/Dashboard/dashboard.html'),
-              login: resolve(__dirname, 'src/Login/login.html')
+              main: resolve(import.meta.dirname, 'src/index.html'),
+              dashboard: resolve(import.meta.dirname, 'src/Dashboard/dashboard.html'),
+              login: resolve(import.meta.dirname, 'src/Login/login.html')
           }
       }
     }
